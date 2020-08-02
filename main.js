@@ -2,7 +2,18 @@ const { app, BrowserWindow } = require('electron');
 const io_client = require('socket.io-client');
 const socket = io_client.connect('http://localhost:3215', {query:'connecting_as=electron'});
 
+// Socket connection to Pi Server
+socket.on('connect', () => {
+	console.log('Connected to Pi Local Socket')
+})
+
+socket.on('LSS_is_electron_running', data => {
+	console.log('LSS ELECTRON')
+	socket.emit('PP_electron_is_running');
+})
+
 function createWindow () {
+	
   // Create the browser window.
   let win = new BrowserWindow({
 		width: 1920,
@@ -15,15 +26,40 @@ function createWindow () {
 	// and load the index.html of the app.
 	win.loadURL('http://localhost');
 	win.setFullScreen(true);
-	win.setMenuBarVisibility(false);
+	// win.setMenuBarVisibility(false);
+
+	win.webContents.on('render-process-gone', error => {
+		console.log('WEBCONTENT RENDERED PROCESS GONE:', new Date(), error);
+		app.quit();
+	})
+	
+	win.webContents.on('unresponsive', error => {
+		console.log('UNRESPONSIVE:', new Date(), error);
+		app.quit();
+	})
 }
 
-app.whenReady().then(createWindow)
 
-socket.on('connect', () => {
-	console.log('Connected to Pi Local Socket')
+app.whenReady().then(createWindow);
+
+app.commandLine.appendSwitch("disable-http-cache");
+
+app.on('gpu-process-crashed', error => {
+	console.log('GPU PROCESS CRASHED:', new Date(), error);
+	app.quit();
 })
 
-socket.on('LSS_is_electron_running', data => {
-	socket.emit('PP_electron_is_running');
+app.on('render-process-crashed', error => {
+	console.log('RENDERER PROCESS CRASHED:', new Date(), error);
+	app.quit();
+})
+
+app.on('render-process-gone', error => {
+	console.log('RENDERER PROCESS GONE:', new Date(), error);
+	app.quit();
+})
+
+process.on('uncaughtException', error => {
+	console.log('UNCAUGHT EXCEPTION:', new Date(), error);
+	app.quit();
 })
