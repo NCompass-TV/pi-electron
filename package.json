@@ -1,5 +1,5 @@
 {
-  "name": "pi-browser",
+  "name": "pi-electron",
   "version": "1.0.0",
   "description": "",
   "main": "main.js",
@@ -10,7 +10,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "electron": "^8.1.1"
+    "electron": "^8.2.4"
   },
   "dependencies": {
     "socket.io-client": "^2.3.0"
