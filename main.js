@@ -29,7 +29,7 @@ function createWindow () {
 	// win.setMenuBarVisibility(false);
 
 	win.webContents.on('render-process-gone', error => {
-		console.log('WEBCONTENT RENDERED PROCESS GONE:', new Date(), error);
+		console.log('WEBCONTENT RENDER PROCESS GONE:', new Date(), error);
 		app.quit();
 	})
 	
@@ -50,12 +50,12 @@ app.on('gpu-process-crashed', error => {
 })
 
 app.on('render-process-crashed', error => {
-	console.log('RENDERER PROCESS CRASHED:', new Date(), error);
+	console.log('RENDER PROCESS CRASHED:', new Date(), error);
 	app.quit();
 })
 
 app.on('render-process-gone', error => {
-	console.log('RENDERER PROCESS GONE:', new Date(), error);
+	console.log('RENDER PROCESS GONE:', new Date(), error);
 	app.quit();
 })
 
