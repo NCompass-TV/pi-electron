@@ -19,7 +19,7 @@ function createWindow () {
 		width: 1920,
 		height: 1080,
 		webPreferences: {
-			nodeIntegration: true
+			contextIsolation: true
 		}
   })
 
@@ -40,9 +40,12 @@ function createWindow () {
 }
 
 
-app.whenReady().then(createWindow);
+app.whenReady(() => {
+	app.allowRendererProcessReuse = true;
+}).then(createWindow);
 
-app.commandLine.appendSwitch("disable-http-cache");
+
+// app.commandLine.appendSwitch("disable-http-cache");
 
 app.on('gpu-process-crashed', error => {
 	console.log('GPU PROCESS CRASHED:', new Date(), error);
