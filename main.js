@@ -24,7 +24,7 @@ function createWindow () {
   })
 
 	// and load the index.html of the app.
-	win.loadURL('http://localhost');
+	win.loadURL('http://localhost:4200');
 	win.setFullScreen(true);
 	// win.setMenuBarVisibility(false);
 
@@ -40,9 +40,12 @@ function createWindow () {
 }
 
 
-app.whenReady().then(createWindow);
+app.whenReady(() => {
+	app.allowRendererProcessReuse = true;
+}).then(createWindow);
 
-app.commandLine.appendSwitch("disable-http-cache");
+
+// app.commandLine.appendSwitch("disable-http-cache");
 
 app.on('gpu-process-crashed', error => {
 	console.log('GPU PROCESS CRASHED:', new Date(), error);
