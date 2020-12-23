@@ -24,7 +24,7 @@ function createWindow () {
   })
 
 	// and load the index.html of the app.
-	win.loadURL('http://localhost');
+	win.loadURL('http://localhost:4200');
 	win.setFullScreen(true);
 	// win.setMenuBarVisibility(false);
 
@@ -39,6 +39,7 @@ function createWindow () {
 	})
 }
 
+app.allowRendererProcessReuse = true;
 
 app.whenReady().then(createWindow);
 
