@@ -1,32 +1,31 @@
 const { app, BrowserWindow } = require('electron');
 const io_client = require('socket.io-client');
+const numeral = require('numeral');
 const socket = io_client.connect('http://localhost:3215', {query:'connecting_as=electron'});
+
+// Disable security warnings in console
+process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = '1';
 
 // Socket connection to Pi Server
 socket.on('connect', () => {
-	console.log('Connected to Pi Local Socket')
+	console.log('Connected to Local Socket Server')
 })
 
 socket.on('LSS_is_electron_running', data => {
-	console.log('LSS ELECTRON')
+	console.log('LSS ELECTRON');
 	socket.emit('PP_electron_is_running');
 })
 
 function createWindow () {
 	
-  // Create the browser window.
-  let win = new BrowserWindow({
+	// Create the browser window.
+	let win = new BrowserWindow({
 		width: 1920,
-		height: 1080,
-		webPreferences: {
-			nodeIntegration: true
-		}
-  })
+		height: 1080
+	})
 
-	// and load the index.html of the app.
-	win.loadURL('http://localhost');
+	win.loadURL(`file://${__dirname}/app/index.html`);
 	win.setFullScreen(true);
-	// win.setMenuBarVisibility(false);
 
 	win.webContents.on('render-process-gone', error => {
 		console.log('WEBCONTENT RENDER PROCESS GONE:', new Date(), error);
@@ -64,3 +63,9 @@ process.on('uncaughtException', error => {
 	console.log('UNCAUGHT EXCEPTION:', new Date(), error);
 	app.quit();
 })
+
+// setInterval(() => {
+// 	const {rss, heapTotal} = process.memoryUsage();
+// 	console.log('rss', numeral(rss).format('0.0 ib'),
+// 				'heaptotal', numeral(heapTotal).format('0.0 ib'));
+// }, 10000)
