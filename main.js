@@ -1,7 +1,7 @@
 const { app, BrowserWindow } = require('electron');
 const io_client = require('socket.io-client');
 const numeral = require('numeral');
-const socket = io_client.connect('http://localhost:3215', {query:'connecting_as=electron'});
+const socket = io_client('http://localhost:3215', {query:'connecting_as=electron'});
 
 // Disable security warnings in console
 process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = '1';
